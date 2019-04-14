@@ -21,3 +21,11 @@ It works as an output of the transaction and indicates a new note has been issue
 * Note nullifier
 
 It works as an input of the transaction and indicates an old note will be void. Like Bitcoin, the input of one transaction must be the output of another transaction. So the nullifier corresponds to a commitment uniquely, but it should avoid disclosing any information about which commitment the nullifier is related to. To construct a nullifier that satisfies the requirements, it is still a good idea to take a hash. Therefore, the nullifier corresponding to the note with the serial number r can be described as `HASH(r)`.
+
+Bitcoin tracks unspent transaction outputs (UTXOs) to determine what transactions are spendable. In ZeroCash, the shielded equivalent of a UTXO is called a “commitment”, and spending a commitment involves revealing a nullifier. ZeroCash nodes keep lists of all the commitments that have been created and all the nullifiers that have been revealed.
+
+Suppose there are three notes currently, note1=(PK1,v1,r1)，note2=(PK2,v2,r2)，note3=(PK3,v3,r3). The note1 belongs to Anna, and note2 has been spent. The contents of The nullifier and commitment list maintained by each node at this time is shown in Table 1.1.
+
+Commitment Set,Nullifier Set
+`C1 = HASH(note1)`,`NF1 = HASH(r2)`pku,04e284716af198b11fe56a302cbc899631364d16be4db2c321f235e884c084f6badb61cd398cea61cf46af24f9c066cbdfc244638ad893c92b8d0c58ff3ba333ad
+
