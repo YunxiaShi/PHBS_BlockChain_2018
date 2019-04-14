@@ -2,4 +2,4 @@
 
 ## Zerocash and sk-SNARK
 
-### Data privacy protection technology of blockchain
+* ### Data privacy protection technology of blockchain
