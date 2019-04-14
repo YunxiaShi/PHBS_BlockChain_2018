@@ -74,4 +74,6 @@ It means that the transaction verification process does not involve a large amou
 The prover and the verifier don’t need to exchange information many times during transaction verification. In ZeroCoin, there are many interactions between prover and verifier to achieve verification reliability, and zk-SNARK attempts to completely avoid these interactions.
 
 The zk-SNARK is a comprehensive application of mathematical theory such as algebraic number theory and abstract algebra. The principle is not deduced in detail here. Figure 1.1 shows the mathematical methods used in it to achieve succinctness, anti-counterfeiting, non-interaction and so on.
-<img width="748" alt="information gain" src="https://github.com/YunxiaShi/PHBS_BlockChain_2018/blob/master/principle.jpg>
+<img width="748" alt="information gain" src="https://github.com/YunxiaShi/PHBS_BlockChain_2018/blob/master/principle.jpg">
+                                             
+![Exp Dist](https://github.com/YunxiaShi/PHBS_BlockChain_2018/blob/master/principle.jpg)
