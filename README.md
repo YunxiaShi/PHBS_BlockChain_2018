@@ -2,5 +2,8 @@
 
 ## Zerocash and sk-SNARK
 
-### 1.Data privacy protection technology of blockchain
-In order to improve the anonymity of blockchain technology, protect users’ identity privacy and transaction data privacy, a variety of privacy protection schemes have been proposed, including mixed currency mechanism and encryption protocol technology. Coinjoin, CoinSuffle, Mixcoin, Blindcoin are digital currency that use mixed currency mechanism. The existing technology mainly relies on the third-party platform to mix the transaction sets of multiple users and output them to the corresponding addresses, so that the attacker cannot link the input and output addresses of the transaction. The other is to construct a decentralized anonymous "digital currency" system through cryptography techniques such as multi-party secure computing, blind signature, ring signature and zero-knowledge proof, such as Monero, ZeroCoin and ZeroCash. The following is a comprehensive analysis of ZeroCash and zk-SNARK technology.
+### 1. Zero knowledge proof
+Zero knowledge proof was proposed by Goldwasser in 1989 and was a two-party or multi-party agreement. It allows one party (the prover) to prove to another (the verifier) that a statement is true, without revealing any information beyond the validity of the statement itself. Take the currency transaction as an example. It means the transaction can be proved valid without revealing the payer, the payee, or the transaction amount.
+
+In 2013, based on zero-knowledge proof, Miers proposed ZeroCoin [12], which realized a completely anonymous digital currency transaction, but there are still many problems with ZeroCoin. For example, it does not support non-interactive transactions, does not protect the transaction amount and the privacy of the payee, and the currency amount can not be arbitrarily divided. To this end, many new schemes have been proposed. The ZeroCash proposed by SASSON [14] is the most typical.
+
