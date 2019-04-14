@@ -75,7 +75,8 @@ The prover and the verifier don’t need to exchange information many times duri
 
 The zk-SNARK is a comprehensive application of mathematical theory such as algebraic number theory and abstract algebra. The principle is not deduced in detail here. Figure 1.1 shows the mathematical methods used in it to achieve succinctness, anti-counterfeiting, non-interaction and so on.
 <img width="648" alt="principle" src="https://github.com/YunxiaShi/PHBS_BlockChain_2018/blob/master/principle.jpg">
+
 Figure 1.1 The principle of zk-SNARK
 
-* 	Describe the problem as a QAP
+* #### Describe the problem as a QAP
 
