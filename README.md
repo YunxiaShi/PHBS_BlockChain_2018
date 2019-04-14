@@ -26,6 +26,6 @@ Bitcoin tracks unspent transaction outputs (UTXOs) to determine what transaction
 
 Suppose there are three notes currently, note1=(PK1,v1,r1)，note2=(PK2,v2,r2)，note3=(PK3,v3,r3). The note1 belongs to Anna, and note2 has been spent. The contents of The nullifier and commitment list maintained by each node at this time is shown in Table 1.1.
 
-Commitment Set,Nullifier Set
-`C1 = HASH(note1)`,`NF1 = HASH(r2)`pku,04e284716af198b11fe56a302cbc899631364d16be4db2c321f235e884c084f6badb61cd398cea61cf46af24f9c066cbdfc244638ad893c92b8d0c58ff3ba333ad
-
+Commitment Set | Nullifier Set
+------------ | -------------
+`C1 = HASH(note1)` | `NF1 = HASH(r2)`
