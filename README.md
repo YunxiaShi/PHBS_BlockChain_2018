@@ -15,7 +15,9 @@ In Bitcoin, UXTO is the basic transaction unit, and ZeroCash uses note as the ba
 The transactions in ZeroCash have two categories, transparent addresses and hidden addresses. The input and output of the transparent address transaction are directly visible note information. For hidden address transactions, the input and output are no longer plaintext notes, but the note nullifier and note commitment.
 
 * Note commitment
+
 It works as an output of the transaction and indicates a new note has been issued. A valid commitment is a proof of a spendable note. However, we need to make sure that the information it contains does not reveal which note it is, who the owner is and how much amount it is. Therefore, we can hash the information of the note. And the commit corresponding to the note can be simply described as `HASH(note)`.
 
 * Note nullifier
+
 It works as an input of the transaction and indicates an old note will be void. Like Bitcoin, the input of one transaction must be the output of another transaction. So the nullifier corresponds to a commitment uniquely, but it should avoid disclosing any information about which commitment the nullifier is related to. To construct a nullifier that satisfies the requirements, it is still a good idea to take a hash. Therefore, the nullifier corresponding to the note with the serial number r can be described as `HASH(r)`.
