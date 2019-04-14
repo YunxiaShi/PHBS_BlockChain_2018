@@ -101,6 +101,9 @@ Instead of directly telling the sampling point to the prover, the verifier provi
 
 * #### Bilinear map: homomorphic hiding of multiplication
 The homomorphic hiding introduced earlier is one-to-one, mapping an input to an output. A bilinear map maps two elements from two domains to one element in the third field: `e(X, Y) → Z`, and has linearity on both inputs: 
+
 `e(P+R, Q) = e(P, Q) + e(R, Q)`
+
 `e(P, Q+S) = e(P, Q) + e(P, S)`
-Assuming that for any two factorizations of x, (a, b) and (c, d) (ie x = ab = cd), there are two additive homomorphic maps E1 and E2, and a bilinear map e, such that the equation is always true: e(E1(a), E2(b)) = e(E1(c), E2(d)) = X. Then, the mapping of x->X is also an additive homomorphic mapping, denoted as E, then E(xy) = e(E1(x), E2(y)), and the homomorphic hiding problem of multiplication can be solved.
+
+Assuming that for any two factorizations of  `x`, `(a, b)` and `(c, d)` (ie `x = ab = cd`), there are two additive homomorphic maps `E1` and `E2`, and a bilinear map `e`, such that the equation is always true: `e(E1(a), E2(b)) = e(E1(c), E2(d)) = X`. Then, the mapping of `x->X` is also an additive homomorphic mapping, denoted as `E`, then `E(xy) = e(E1(x), E2(y))`, and the homomorphic hiding problem of multiplication can be solved.
