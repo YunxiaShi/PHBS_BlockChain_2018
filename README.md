@@ -14,11 +14,11 @@ In Bitcoin, UXTO is the basic transaction unit, and ZeroCash uses note as the ba
 
 The transactions in ZeroCash have two categories, transparent addresses and hidden addresses. The input and output of the transparent address transaction are directly visible note information. For hidden address transactions, the input and output are no longer plaintext notes, but the note nullifier and note commitment.
 
-* Note commitment
+* #### Note commitment
 
 It works as an output of the transaction and indicates a new note has been issued. A valid commitment is a proof of a spendable note. However, we need to make sure that the information it contains does not reveal which note it is, who the owner is and how much amount it is. Therefore, we can hash the information of the note. And the commit corresponding to the note can be simply described as `HASH(note)`.
 
-* Note nullifier
+* #### Note nullifier
 
 It works as an input of the transaction and indicates an old note will be void. Like Bitcoin, the input of one transaction must be the output of another transaction. So the nullifier corresponds to a commitment uniquely, but it should avoid disclosing any information about which commitment the nullifier is related to. To construct a nullifier that satisfies the requirements, it is still a good idea to take a hash. Therefore, the nullifier corresponding to the note with the serial number r can be described as `HASH(r)`.
 
@@ -33,6 +33,7 @@ Commitment Set | Nullifier Set
 `C3 = HASH(note3)` |
 
 Table 1.1 The commitment and nullifier list before payment
+
 
 Anna decided to transfer the `note1` to Carl. His public key is `PK4`, she will do this:
 * Randomly pick a serial number `r4` and use this to generate `note4 = (PK4, v1, r4)`. 
@@ -50,6 +51,7 @@ Commitment Set | Nullifier Set
 
 Table 1.2 The commitment and nullifier list after payment
 
+
 The above is the principle of ZeroCash, but the following problems will occur.
 * Make sure that the note corresponding to `NF2` given by Anna does exist.
 * Even if `NF2` does point to a note, make sure Anna has the right to use it.
@@ -63,13 +65,13 @@ Other nodes acknowledge that the transaction is legal after verifying the `π` i
 
 ### 3. [How zk-SNARK works](https://z.cash/technology/zksnarks)
 ZeroCash uses zk-SNARK to prove that the conditions for a valid transaction have been satisfied without revealing any crucial information about the addresses or values involved. The acronym zk-SNARK stands for zero knowledge Succinct Non-interactive Argument of Knowledge.
-* Zero knowledge
+* #### Zero knowledge
 
 Zero knowledge proof allows the prover to prove to the verifier that a statement is true, without revealing any information beyond the validity of the statement itself.
-* Succinct
+* #### Succinct
 
 It means that the transaction verification process does not involve a large amount of data transmission and the verification algorithm is simple.
-* Non-interactive
+* #### Non-interactive
 
 The prover and the verifier don’t need to exchange information many times during transaction verification. In ZeroCoin, there are many interactions between prover and verifier to achieve verification reliability, and zk-SNARK attempts to completely avoid these interactions.
 
@@ -78,5 +80,27 @@ The zk-SNARK is a comprehensive application of mathematical theory such as algeb
 
 Figure 1.1 The principle of zk-SNARK
 
-* #### Describe the problem as a QAP
 
+* #### Describe the problem as a QAP
+As a mathematical method, zk-SNARK must have quantifiable input, so we must first establish a mathematical model for the target problem. If the calculation equation corresponding to the target problem holds when the particular input values are substituted into it, then these inputs are called the "solutions" of the problem. What zk-SNARK has to deal with is to prove "I know the solution."
+
+zk-SNARK is only suitable for a specific form of computational problem, the so-called QAP (Quadratic Arithmetic Programs), which writes the problem into a polynomial equation: `t(x) h(x) = w(x) v(x)`. The prover needs to verify to the verifier that he knows the solution to this equation without showing the solution.
+
+* #### Sample to achieve a concise proof
+For ZeroCash, the degree of polynomial can be up to 2,000,000 which means that a large amount of data (polynomial millions of coefficient values) needs to be transmitted for each verification, which obviously does not meet the requirements of zk-SNARK simplicity. The verifier randomly selects a sampling point s to simplify the problem of polynomial multiplication and the verification of equality of polynomial functions into a simple multiplication and the verification of the equation `t(s)h(s) = w(s)v(s)`. This not only reduces the size of the proof, but also greatly reduces the time required for verification.
+
+But this method has a problem. If the prover knows the sampling point s, even if he does not know the correct solution of the problem, he can construct `t'(x)`, `h'(x)`, `w'(x)`, `v(x)`. So that at least at the sampling point `s`, `t'(s) h'(s) = w'(s)v(s)`. The following Homomorphic Hiding can solve this problem by not allowing the sampling point s to be known by the prover, but the prover can also give the value of the polynomial at the sampling point.
+
+* #### Use homomorphic mapping to hide sampling points
+Homomorphic Hidden is a property of mapping E that satisfies the following conditions.
+1.	For most `x`,  we can’t derive `x` from `X=E(x)`.
+2.	If `x1≠x2`，then `E(x1)≠E(x2)`.
+3.	`E(ax1+bx2) = a * E(x1) + b * E(x2)`，that is, the addition is homomorphic. After mapping, the calculation form of the addition is still preserved.
+
+Instead of directly telling the sampling point to the prover, the verifier provides the mapping values `E(1)`, `E(s1)`, `E(s2)`, …, `E(sN)` of `s0`, `s1`, `s2`,...`sN`. The polynomials `t(s)`, `h(s)`, `w(s)`, `v(s)` are linear combinations of {sn, n=(0,1,2,3...,N)}. According to the properties of homomorphic mapping, `E(t(s))`, `E(h(s))`, `E(w(s))`, `E(v(s))` should also be the linear combinations `{E(sn), n=(0,1,2,3...,N)}`. This allows the prover to calculate `E(t(s))`, `E(h(s))`, `E(w(s))`, `E(v(s))` without knowing `s`. But to prove `E(t(s)h(s)) = E(w(s)v(s))`, the homomorphic hiding problem of multiplication needs to be solved.
+
+* #### Bilinear map: homomorphic hiding of multiplication
+The homomorphic hiding introduced earlier is one-to-one, mapping an input to an output. A bilinear map maps two elements from two domains to one element in the third field: `e(X, Y) → Z`, and has linearity on both inputs: 
+`e(P+R, Q) = e(P, Q) + e(R, Q)`
+`e(P, Q+S) = e(P, Q) + e(P, S)`
+Assuming that for any two factorizations of x, (a, b) and (c, d) (ie x = ab = cd), there are two additive homomorphic maps E1 and E2, and a bilinear map e, such that the equation is always true: e(E1(a), E2(b)) = e(E1(c), E2(d)) = X. Then, the mapping of x->X is also an additive homomorphic mapping, denoted as E, then E(xy) = e(E1(x), E2(y)), and the homomorphic hiding problem of multiplication can be solved.
