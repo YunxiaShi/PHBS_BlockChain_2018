@@ -97,7 +97,7 @@ Homomorphic Hidden is a property of mapping E that satisfies the following condi
 2.	If `x1≠x2`，then `E(x1)≠E(x2)`.
 3.	`E(ax1+bx2) = a * E(x1) + b * E(x2)`，that is, the addition is homomorphic. After mapping, the calculation form of the addition is still preserved.
 
-Instead of directly telling the sampling point to the prover, the verifier provides the mapping values `E(1)`, `E(s1)`, `E(s2)`, …, `E(sN)` of `s0`, `s1`, `s2`,...`sN`. The polynomials `t(s)`, `h(s)`, `w(s)`, `v(s)` are linear combinations of {sn, n=(0,1,2,3...,N)}. According to the properties of homomorphic mapping, `E(t(s))`, `E(h(s))`, `E(w(s))`, `E(v(s))` should also be the linear combinations `{E(sn), n=(0,1,2,3...,N)}`. This allows the prover to calculate `E(t(s))`, `E(h(s))`, `E(w(s))`, `E(v(s))` without knowing `s`. But to prove `E(t(s)h(s)) = E(w(s)v(s))`, the homomorphic hiding problem of multiplication needs to be solved.
+Instead of directly telling the sampling point to the prover, the verifier provides the mapping values `E(1)`, `E(s^1)`, `E(s^2)`, …, `E(s^N)` of `s^0`, `s^1`, `s^2`,...`s^N`. The polynomials `t(s)`, `h(s)`, `w(s)`, `v(s)` are linear combinations of `{s^n, n=(0,1,2,3...,N)}`. According to the properties of homomorphic mapping, `E(t(s))`, `E(h(s))`, `E(w(s))`, `E(v(s))` should also be the linear combinations `{E(s^n), n=(0,1,2,3...,N)}`. This allows the prover to calculate `E(t(s))`, `E(h(s))`, `E(w(s))`, `E(v(s))` without knowing `s`. But to prove `E(t(s)h(s)) = E(w(s)v(s))`, the homomorphic hiding problem of multiplication needs to be solved.
 
 * #### Bilinear map: homomorphic hiding of multiplication
 The homomorphic hiding introduced earlier is one-to-one, mapping an input to an output. A bilinear map maps two elements from two domains to one element in the third field: `e(X, Y) → Z`, and has linearity on both inputs: 
@@ -106,4 +106,10 @@ The homomorphic hiding introduced earlier is one-to-one, mapping an input to an 
 
 `e(P, Q+S) = e(P, Q) + e(P, S)`
 
-Assuming that for any two factorizations of  `x`, `(a, b)` and `(c, d)` (ie `x = ab = cd`), there are two additive homomorphic maps `E1` and `E2`, and a bilinear map `e`, such that the equation is always true: `e(E1(a), E2(b)) = e(E1(c), E2(d)) = X`. Then, the mapping of `x->X` is also an additive homomorphic mapping, denoted as `E`, then `E(xy) = e(E1(x), E2(y))`, and the homomorphic hiding problem of multiplication can be solved.
+Assuming that for any two factorizations of  `x`, `(a, b)` and `(c, d)` (ie `x = ab = cd`), there are two additive homomorphic maps `E1` and `E2`, and a bilinear map `e`, such that the equation is always true: `e(E1(a), E2(b)) = e(E1(c), E2(d)) = X`. Then, the mapping of `x->X` is also an additive homomorphic mapping, denoted as `E`, then `E(xy) = e(E1(x), E2(y))`。
+
+`E(t(s)h(s)) = e(E1(t(s)), E2(h(s)))`
+`E(w(s)v(s)) = e(E1(w(s)), E2(v(s)))`
+`E(t(s)h(s)) = E(w(s)v(s))`
+
+Thus, the homomorphic hiding problem of multiplication can be solved.
