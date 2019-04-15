@@ -109,7 +109,9 @@ The homomorphic hiding introduced earlier is one-to-one, mapping an input to an 
 Assuming that for any two factorizations of  `x`, `(a, b)` and `(c, d)` (ie `x = ab = cd`), there are two additive homomorphic maps `E1` and `E2`, and a bilinear map `e`, such that the equation is always true: `e(E1(a), E2(b)) = e(E1(c), E2(d)) = X`. Then, the mapping of `x->X` is also an additive homomorphic mapping, denoted as `E`, then `E(xy) = e(E1(x), E2(y))`。
 
 `E(t(s)h(s)) = e(E1(t(s)), E2(h(s)))`
+
 `E(w(s)v(s)) = e(E1(w(s)), E2(v(s)))`
+
 `E(t(s)h(s)) = E(w(s)v(s))`
 
 Thus, the homomorphic hiding problem of multiplication can be solved.
