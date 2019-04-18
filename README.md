@@ -84,7 +84,7 @@ Figure 1.1 The principle of zk-SNARK
 * #### Describe the problem as a QAP
 As a mathematical method, zk-SNARK must have quantifiable input, so we must first establish a mathematical model for the target problem. If the calculation equation corresponding to the target problem holds when the particular input values are substituted into it, then these inputs are called the "solutions" of the problem. What zk-SNARK has to deal with is to prove "I know the solution."
 
-zk-SNARK is only suitable for a specific form of computational problem, the so-called QAP (Quadratic Arithmetic Programs), which writes the problem into a polynomial equation: `t(x) h(x) = w(x) v(x)`. The prover needs to verify to the verifier that he knows the solution to this equation without showing the solution.
+zk-SNARK is only suitable for a specific form of computational problem, the so-called QAP (Quadratic Arithmetic Programs), which writes the problem into a polynomial equation: `t(x) h(x) = w(x) v(x)`. The prover needs to verify that he knows the solution to this equation without showing the solution.
 
 * #### Sample to achieve a concise proof
 For ZeroCash, the degree of polynomial can be up to 2,000,000 which means that a large amount of data (polynomial millions of coefficient values) needs to be transmitted for each verification, which obviously does not meet the requirements of zk-SNARK simplicity. The verifier randomly selects a sampling point s to simplify the problem of polynomial multiplication and the verification of equality of polynomial functions into a simple multiplication and the verification of the equation `t(s)h(s) = w(s)v(s)`. This not only reduces the size of the proof, but also greatly reduces the time required for verification.
