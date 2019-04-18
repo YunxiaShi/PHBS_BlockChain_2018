@@ -40,7 +40,7 @@ Anna decided to transfer the `note1` to Carl. His public key is `PK4`, she will 
 * Secretly send `note4` to Carl.
 * Broadcast the nullifier of `note1` (`NF2 = HASH(r1)`) and newly generated commitment of `note4` (`HASH (note4)`) to all nodes.
 
-The node that receives the Anna’s broadcast will check if `NF2` has already existed in the nullifier set. If not, then the corresponding note is valid. The node will add `HASH (note4)` and `NF2` to the commit and nullifier list maintained by itself, as shown in Table 1.2. The role of nullifier is to prevent digital currency from being double spending.
+The node that receives the Anna’s broadcast will check if `NF2` has already existed in the nullifier set. If not, then the corresponding note is valid. The node will add `HASH (note4)` and `NF2` to the commit and nullifier set maintained by itself, as shown in Table 1.2. The role of nullifier is to prevent digital currency from double spending.
 
 Commitment Set | Nullifier Set
 -------------- | -------------
