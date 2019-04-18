@@ -56,12 +56,12 @@ The above is the principle of ZeroCash, but the following problems will occur.
 * Make sure that the note corresponding to `NF2` given by Anna does exist.
 * Even if `NF2` does point to a note, make sure Anna has the right to use it.
 
-These two issues can of course be proved by publishing the contents of `note1`, but this will reveal Anna's data privacy. Zero knowledge proof comes in handy at this time. Anna will also provide an evidence `π`. `π` is sufficient to prove that Anna knows that `PK1`, `sk1` (the private key corresponding to `PK1`) and `r1` which satisfy the following conditions.
+These two issues can of course be proved by publishing the contents of `note1`, but this will reveal Anna's data privacy. The zk-SNARK comes in handy at this time. Anna will also provide an evidence `π`. `π` is sufficient to prove that Anna knows that `PK1`, `sk1` (the private key corresponding to `PK1`) and `r1` which satisfy the following conditions.
 * Use `PK1` and `r1` to restore the note. If its hash value exists in the commitment list, it shows  the note used for payment is valid.
 * If `sk1` is the private key of `PK1`, Anna has the right to use this note.
 * If `HASH(r1) = NF2`, nullifier is consistent with commitment.
 
-Other nodes acknowledge that the transaction is legal after verifying the `π` is valid. At the same time, the properties of Zero knowledge proof will ensure no information about `PK1`, `sk1` and `r1` can be revealed by `π`. 
+Other nodes acknowledge that the transaction is legal after verifying the `π` is valid. At the same time, the properties of zk-SNARK will ensure no information about `PK1`, `sk1` and `r1` can be revealed by `π`. 
 
 ### 3. [How zk-SNARK works](https://z.cash/technology/zksnarks)
 ZeroCash uses zk-SNARK to prove that the conditions for a valid transaction have been satisfied without revealing any crucial information about the addresses or values involved. The acronym zk-SNARK stands for zero knowledge Succinct Non-interactive Argument of Knowledge.
