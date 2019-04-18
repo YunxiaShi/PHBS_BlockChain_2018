@@ -10,7 +10,7 @@ In 2013, based on zero-knowledge proof, [Miers](https://ieeexplore.ieee.org/docu
 ### 2. [How ZeroCash works](https://blog.z.cash/zcash-private-transactions/)
 Based on ZeroCoin, ZeroCash adopts zk-SNARK technology, which can effectively protect the information of the payer, payee and the payment amount, and achieves full anonymity. This part is to provide a simplified explanation of how privacy-preserving transactions work in ZeroCash, and where exactly Zero knowledge proof comes into the picture.
 
-In Bitcoin, UXTO is the basic transaction unit, and ZeroCash uses note as the basic transaction unit. Simplify the note as `note = (PK, v, r)`, `PK` is the owner’s public key (address), `v` is the amount, and `r` is the serial number that can uniquely distinguish the note. 
+In Bitcoin, UTXO is the basic transaction unit, and ZeroCash uses note as the basic transaction unit. Simplify the note as `note = (PK, v, r)`, `PK` is the owner’s public key (address), `v` is the amount, and `r` is the serial number that can uniquely distinguish the note. 
 
 The transactions in ZeroCash have two categories, transparent addresses and hidden addresses. The input and output of the transparent address transaction are directly visible note information. For hidden address transactions, the input and output are no longer plaintext notes, but the note nullifier and note commitment.
 
