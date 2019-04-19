@@ -2,12 +2,40 @@
 
 ## ZeroCash and zk-SNARK
 
-### 1. Zero knowledge proof
+### 1. Introduction
+Blockchain is a kind of distributed ledger technology with the characteristics of decentralization, transparent and secure. It integrates peer-to-peer transmission, consensus mechanisms and digital encryption technology. Each participating node in the system holds a complete copy of the data. They maintain the integrity of the data and can effectively avoid the risk of single-point crash and data leakage of the central server.
+
+However, the global ledger that records transaction data in the blockchain is public. And because the validity of the transaction is required to retrieve historical transactions during the consensus process, all transaction information cannot be directly protected by encryption. This increases the risk of data privacy breaches. Dynamic network properties of the transaction, such as coin flow and the number of edge outputs and inputs, contribute further to reveal account identity.[7]
+
+In traditional data privacy protection schemes, the data is stored in the central server. The data management center can protect the data privacy by using the encryption technology, such as [K-anonymity](https://www.computer.org/csdl/proceedings-article/icde/2005/22850217/12OmNvTBB6p) and [homomorphic encryption technology](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.371.8983). However, these schemes do not apply to blockchain. Many solutions have been proposed  for the data privacy leakage problem. The main idea is to hide some of the information in the public data without affecting the normal operation of the blockchain system, and to increase the difficulty of data analysis. This paper introduces the mixed currency mechanism and cryptography technology in the existing privacy protection scheme, and introduces the ZeroCash and zk-SNARK technology in detail.
+
+### 2. Data privacy of blockchain
+#### 2.1 Anonymity
+The most common approach for protecting the privacy of individuals is to anonymize data before releasing it. This approach is based on the assumption that if the data contains no identifying information about individuals (names, addresses, etc.) it should be safe for release. Unfortunately, individuals can often be identified in anonymized datasets using so-called re-identification attacks. In fact, the anonymity of digital currency needs to achieve pseudonym and unlinkability.
+
+Digital currency such as bitcoin, its users participate in transactions using Bitcoin addresses. The transaction address is formed by Hash transformation and Base58 coding, and has a certain degree of pseudonym. However, since the transaction record is public and traceable, the transaction rules of the address, such as the transaction frequency, transaction characteristics, and the relationship between the addresses, can be analyzed according to the records in the global ledger. So Bitcoin does not guarantee [unlinkability of transactions](https://link.springer.com/chapter/10.1007%2F978-3-642-39884-1_2).
+
+[Reid](https://link.springer.com/chapter/10.1007%2F978-1-4614-4139-7_10?LI=true) analyzed the input and output relationships in the trading network by constructing a trading network and a user network, and obtained multiple inputs finally aggregate to an address, indicating that multi-input transactions are generally initiated by the same owner. 
+
+#### 2.2 Deanonymous attack
+Trackers can deanonymize users of cryptocurrencies based on address clustering techniques. It is trivial to generate new Bitcoin addresses, and most wallet software takes advantage of this feature to improve user privacy. In the normal course of operation, users end up with coins split between numerous addresses, and it may not be obvious which addresses belong to the same user (or entity). However, address clustering technique can implement clustering of different addresses to obtain multiple addresses of the same user and obtain user privacy.
+
+The following are two clustering heuristics to link addresses controlled by the same user.
+* Multi-input transactions
+For a transaction with multiple input addresses, each input address needs to be signed separately, so the input address of most multi-input transactions comes from the same user[6].
+
+* Change addresses
+The Bitcoin protocol automatically generates a new change address in which the excess from the input address is sent back to the sender. When the set of output addresses contains two addresses, one has not appeared in any previous transaction and all the other output addresses in the transaction have appeared in previous transactions. We can conclude that the former one is a change address and is controlled by the sender[6].
+
+### 3. Data privacy protection technology of blockchain
+In order to improve the anonymity of blockchain technology, protect users’ identity privacy and transaction data privacy, a variety of privacy protection schemes have been proposed, including mixed currency mechanism and encryption protocol technology. Coinjoin, CoinSuffle, Mixcoin, Blindcoin are digital currency that use mixed currency mechanism. The existing technology mainly relies on the third-party platform to mix the transaction sets of multiple users and output them to the corresponding addresses, so that the attacker cannot link the input and output addresses of the transaction. The other is to construct a decentralized anonymous "digital currency" system through cryptography techniques such as multi-party secure computing, blind signature, ring signature and zero-knowledge proof, such as Monero, ZeroCoin and ZeroCash. The following is a comprehensive analysis of ZeroCash and zk-SNARK technology.
+
+#### 3.1 Zero knowledge proof
 Zero knowledge proof was proposed by Goldwasser in 1989 and was a two-party or multi-party agreement. It allows one party (the prover) to prove to another (the verifier) that a statement is true, without revealing any information beyond the validity of the statement itself. Take the currency transaction as an example. It means the transaction can be proved valid without revealing the payer, the payee, or the transaction amount.
 
 In 2013, based on zero-knowledge proof, [Miers](https://ieeexplore.ieee.org/document/6547123) proposed ZeroCoin, which realized a completely anonymous digital currency transaction, but there are still many problems with ZeroCoin. For example, it does not support non-interactive transactions, does not protect the transaction amount and the privacy of the payee, and the currency amount can not be arbitrarily divided. To this end, many new schemes have been proposed. The ZeroCash proposed by [SASSON](https://ieeexplore.ieee.org/document/6956581) is the most typical.
 
-### 2. [How ZeroCash works](https://blog.z.cash/zcash-private-transactions/)
+#### 3.2 [How ZeroCash works](https://blog.z.cash/zcash-private-transactions/)
 Based on ZeroCoin, ZeroCash adopts zk-SNARK technology, which can effectively protect the information of the payer, payee and the payment amount, and achieves full anonymity. This part is to provide a simplified explanation of how privacy-preserving transactions work in ZeroCash, and where exactly Zero knowledge proof comes into the picture.
 
 In Bitcoin, UTXO is the basic transaction unit, and ZeroCash uses note as the basic transaction unit. Simplify the note as `note = (PK, v, r)`, `PK` is the owner’s public key (address), `v` is the amount, and `r` is the serial number that can uniquely distinguish the note. 
@@ -24,7 +52,7 @@ It works as an input of the transaction and indicates an old note will be void. 
 
 Bitcoin tracks unspent transaction outputs (UTXOs) to determine what transactions are spendable. In ZeroCash, spending a commitment involves revealing a nullifier. ZeroCash nodes keep lists of all the commitments that have been created and all the nullifiers that have been revealed.
 
-Suppose there are three notes currently, `note1=(PK1,v1,r1)`，`note2=(PK2,v2,r2)`，`note3=(PK3,v3,r3)`. The `note1` belongs to Anna, and `note2` has been spent. The contents of The nullifier and commitment list maintained by each node at this time is shown in Table 1.1.
+Suppose there are three notes currently, `note1=(PK1,v1,r1)`，`note2=(PK2,v2,r2)`，`note3=(PK3,v3,r3)`. The `note1` belongs to Anna, and `note2` has been spent. The contents of The nullifier and commitment list maintained by each node at this time is shown in Table 3.1.
 
 Commitment Set | Nullifier Set
 -------------- | -------------
@@ -32,7 +60,7 @@ Commitment Set | Nullifier Set
 `C2 = HASH(note2)` |
 `C3 = HASH(note3)` |
 
-Table 1.1 The commitment and nullifier list before payment
+Table 3.1 The commitment and nullifier list before payment
 
 
 Anna decided to transfer the `note1` to Carl. His public key is `PK4`, she will do this:
@@ -40,7 +68,7 @@ Anna decided to transfer the `note1` to Carl. His public key is `PK4`, she will 
 * Secretly send `note4` to Carl.
 * Broadcast the nullifier of `note1` (`NF2 = HASH(r1)`) and newly generated commitment of `note4` (`HASH (note4)`) to all nodes.
 
-The node that receives the Anna’s broadcast will check if `NF2` has already existed in the nullifier set. If not, then the corresponding note is valid. The node will add `HASH (note4)` and `NF2` to the commit and nullifier set maintained by itself, as shown in Table 1.2. The role of nullifier is to prevent digital currency from double spending.
+The node that receives the Anna’s broadcast will check if `NF2` has already existed in the nullifier set. If not, then the corresponding note is valid. The node will add `HASH (note4)` and `NF2` to the commit and nullifier set maintained by itself, as shown in Table 3.2. The role of nullifier is to prevent digital currency from double spending.
 
 Commitment Set | Nullifier Set
 -------------- | -------------
@@ -49,7 +77,7 @@ Commitment Set | Nullifier Set
 `C3 = HASH(note3)` |
 `C4 = HASH(note4)` |
 
-Table 1.2 The commitment and nullifier list after payment
+Table 3.2 The commitment and nullifier list after payment
 
 
 The above is the principle of ZeroCash, but the following problems will occur.
@@ -63,7 +91,7 @@ These two issues can of course be proved by publishing the contents of `note1`, 
 
 Other nodes acknowledge that the transaction is legal after verifying the `π` is valid. At the same time, the properties of zk-SNARK will ensure no information about `PK1`, `sk1` and `r1` can be revealed by `π`. 
 
-### 3. [How zk-SNARK works](https://z.cash/technology/zksnarks)
+#### 3.3 [How zk-SNARK works](https://z.cash/technology/zksnarks)
 ZeroCash uses zk-SNARK to prove that the conditions for a valid transaction have been satisfied without revealing any crucial information about the addresses or values involved. The acronym zk-SNARK stands for zero knowledge Succinct Non-interactive Argument of Knowledge.
 * #### Zero knowledge
 
@@ -75,10 +103,10 @@ It means that the transaction verification process does not involve a large amou
 
 The prover and the verifier don’t need to exchange information many times during transaction verification. In ZeroCoin, there are many interactions between prover and verifier to achieve verification reliability, and zk-SNARK attempts to completely avoid these interactions.
 
-The zk-SNARK is a comprehensive application of mathematical theory such as algebraic number theory and abstract algebra. The principle is not deduced in detail here. Figure 1.1 shows the mathematical methods used in it to achieve succinctness, anti-counterfeiting, non-interaction and so on.
+The zk-SNARK is a comprehensive application of mathematical theory such as algebraic number theory and abstract algebra. The principle is not deduced in detail here. Figure 3.1 shows the mathematical methods used in it to achieve succinctness, anti-counterfeiting, non-interaction and so on.
 <img width="648" alt="principle" src="https://github.com/YunxiaShi/PHBS_BlockChain_2018/blob/master/principle.jpg">
 
-Figure 1.1 The principle of zk-SNARK
+Figure 3.1 The principle of zk-SNARK
 
 
 * #### Describe the problem as a QAP
