@@ -103,7 +103,7 @@ It means that the transaction verification process does not involve a large amou
 
 The prover and the verifier don’t need to exchange information many times during transaction verification. In ZeroCoin, there are many interactions between prover and verifier to achieve verification reliability, and zk-SNARK attempts to completely avoid these interactions.
 
-The zk-SNARK is a comprehensive application of mathematical theory such as algebraic number theory and abstract algebra. The principle is not deduced in detail here. Figure 3.1 shows the mathematical methods used in it to achieve succinctness, anti-counterfeiting, non-interaction and so on.
+The zk-SNARK is a comprehensive application of mathematical theory such as algebraic number theory and abstract algebra. Figure 3.1 shows the mathematical methods used in it to achieve succinctness, anti-counterfeiting, non-interaction and so on (Suppose A is the prover and B is the verifier).
 <img width="648" alt="principle" src="https://github.com/YunxiaShi/PHBS_BlockChain_2018/blob/master/principle.jpg">
 
 Figure 3.1 The principle of zk-SNARK
@@ -112,7 +112,7 @@ Figure 3.1 The principle of zk-SNARK
 * #### Describe the problem as a QAP
 As a mathematical method, zk-SNARK must have quantifiable input, so we must first establish a mathematical model for the target problem. If the calculation equation corresponding to the target problem holds when the particular input values are substituted into it, then these inputs are called the "solutions" of the problem. What zk-SNARK has to deal with is to prove "I know the solution."
 
-zk-SNARK is only suitable for a specific form of computational problem, the so-called QAP (Quadratic Arithmetic Programs), which writes the problem into a polynomial equation: `t(x) h(x) = w(x) v(x)`. The prover needs to verify that he knows the solution to this equation without showing the solution.
+zk-SNARK is only suitable for a specific form of computational problem, the so-called QAP (Quadratic Arithmetic Programs), which writes the problem into a polynomial equation: `t(x) h(x) = w(x) v(x)`. A needs to verify that he knows the solution to this equation without showing the solution.
 
 * #### Sample to achieve a concise proof
 For ZeroCash, the degree of polynomial can be up to 2,000,000 which means that a large amount of data (polynomial millions of coefficient values) needs to be transmitted for each verification, which obviously does not meet the requirements of zk-SNARK simplicity. The verifier randomly selects a sampling point s to simplify the problem of polynomial multiplication and the verification of equality of polynomial functions into a simple multiplication and the verification of the equation `t(s)h(s) = w(s)v(s)`. This not only reduces the size of the proof, but also greatly reduces the time required for verification.
@@ -142,6 +142,38 @@ Assuming that for any two factorizations of  `x`, `(a, b)` and `(c, d)` (ie `x =
 
 `E(t(s)h(s)) = E(w(s)v(s))`
 
-Thus, the homomorphic hiding problem of multiplication can be solved.
+Thus, the homomorphic hiding problem of multiplication can be solved. The specific principles are as follows.
+
+1. B selects point s randomly, calculates `E(s)`, `E(s^2)`,..., and sends it to A.
+2. A calculates `E(t(s))`, `E(h(s))`, `E(w(s))`, `E(v(s))`.
+3. B tests `E(t(s)*h(s))==E(w(s)*v(s))`.
+
+* #### KCA (Knowledge of Coefficient Test and Assumption)
+There is a problem with the above verification method. B cannot verify that A is actually using the polynomial `t(s)`, `h(s)`, `w(s)`, `v(s)` to calculate the result, that is, it cannot be proved that A really knows these polynomials. KCA can solve this problem.
+
+Let us first define a concept: `α` pair refers to a pair of values `(a, b)` that satisfy `b = α * a`. Note that the multiplication here is actually the multiplication on the elliptic curve (ECC). The operation on the elliptic curve has two characteristics: First, when the value of `α` is large, it is difficult to guess `α` through `a` and `b`. And multiplication of elliptic functions satisfies homomorphic hidden.
+
+We use the characteristics of α pair to build a process called KCA:
+1. B randomly selects an `α` to generate `α` pair `(a, b)`, saves `α` itself and sends `(a, b)` to A.
+2. A selects `γ`, generates `(a', b') = (γ⋅a, γ⋅b)`, and returns `(a', b')` to B. Using the commutative law, it can be proved that `(a', b')` is also an `α` pair, `b' = γ⋅b = γα⋅a = α(γ⋅a) = α⋅a'`.
+3. B checks `(a', b')`, confirming that it is an `α` pair, it can be asserted that A knows `γ`.
+
+The above process can be used to build a complete zk-SNARK verification process.
+1. With the homomorphic hiding of multiplication, A and B can jointly select `x⋅g` as `E(x)`.
+2.B calculates `g`, `s⋅g`,..., `s^d⋅g` and `α⋅g`, `αs⋅g`,...,`αs^d⋅g` and sends it to A.
+3.A calculates `a=t(s)⋅g`, `b=αt(s)⋅g` and returns it to B.
+4. The value of `a` is the `E(v(s))` result of the B required to be verified, and KCA guarantees that the value of `a` must be generated by polynomial.
+
+* #### CRS (common reference string): reduce interation
+The ideal situation is that A puts the evidence as a string on the chain and anyone can verify the conclusion. In fact, this strict zero-interaction proof has proven to be incapable of satisfying all proof scenarios. We are second to none, using a method called CRS to put the random numbers `α` and `s` in the "system".
+
+The final zk-SNARK verification process is:
+
+1. Configure `α` and `s` to calculate `(E1(1), E1(s),..., E1(s^d), E2(α), E2(αs),...,E2(αs^d))`, And publicize.
+2.A uses the public parameter to calculate the verification polynomial.
+3.B check the polynomial.
+
+The random parameters built into the "system" are very important. Those who know the secret parameters have the authority of the super administrator and can create counterfeit coins at will. In fact, ZeroCash selects six trusted people from all over the world, each of which generates a part of the key. The six people's passwords are spliced together to generate the publicized data, and then the keys of each people are destroyed. No one has the super administrator's authority unless the six collude to cheat.
 
 ### 4. Conclusion
+The decentralization, safety, tamper resistance, and traceability of blockchain technology have attracted wide attention and applied to various fields. However, blockchain is a distributed ledger technology. In order to quickly reach a consensus on the entire network node, its transactions are open and transparent, which poses a serious threat to users' privacy. How to protect user privacy on the blockchain has always been the focus of researchers. This paper first analyzes the data privacy issues currently faced by blockchain technology. Secondly, it introduces the mixing mechanism and cryptography technology in the existing privacy protection scheme. Finally, it comprehensively analyses ZeroCash and zk-SNARK technology. However, these technologies all have their own advantages and disadvantages, it is necessary to study more secure and efficient blockchain data privacy protection methods in the future.
