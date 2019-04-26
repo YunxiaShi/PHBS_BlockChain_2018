@@ -104,7 +104,7 @@ It means that the transaction verification process does not involve a large amou
 The prover and the verifier don’t need to exchange information many times during transaction verification. In ZeroCoin, there are many interactions between prover and verifier to achieve verification reliability, and zk-SNARK attempts to completely avoid these interactions.
 
 The zk-SNARK is a comprehensive application of mathematical theory such as algebraic number theory and abstract algebra. Figure 3.1 shows the mathematical methods used in it to achieve succinctness, anti-counterfeiting, non-interaction and so on (Suppose A is the prover and B is the verifier).
-<img width="648" alt="principle" src="https://github.com/YunxiaShi/PHBS_BlockChain_2018/blob/master/principle.jpg">
+<img width="648" alt="principle" src="https://github.com/YunxiaShi/PHBS_BlockChain_2018/blob/master/principle.png">
 
 Figure 3.1 The principle of zk-SNARK
 
@@ -146,7 +146,7 @@ Thus, the homomorphic hiding problem of multiplication can be solved. The specif
 
 1. B selects point s randomly, calculates `E(s)`, `E(s^2)`,..., and sends it to A.
 2. A calculates `E(t(s))`, `E(h(s))`, `E(w(s))`, `E(v(s))`.
-3. B tests `E(t(s)*h(s))==E(w(s)*v(s))`.
+3. B tests `E(t(s)h(s))==E(w(s)v(s))`.
 
 * #### KCA (Knowledge of Coefficient Test and Assumption)
 There is a problem with the above verification method. B cannot verify that A is actually using the polynomial `t(s)`, `h(s)`, `w(s)`, `v(s)` to calculate the result, that is, it cannot be proved that A really knows these polynomials. KCA can solve this problem.
