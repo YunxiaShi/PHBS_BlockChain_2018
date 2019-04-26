@@ -143,3 +143,5 @@ Assuming that for any two factorizations of  `x`, `(a, b)` and `(c, d)` (ie `x =
 `E(t(s)h(s)) = E(w(s)v(s))`
 
 Thus, the homomorphic hiding problem of multiplication can be solved.
+
+### 4. Conclusion
